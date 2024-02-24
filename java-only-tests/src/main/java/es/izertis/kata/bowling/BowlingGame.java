@@ -1,4 +1,4 @@
-package com.izertis.kata.bowling;
+package es.izertis.kata.bowling;
 
 public class BowlingGame {
 

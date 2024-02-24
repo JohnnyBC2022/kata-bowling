@@ -1,10 +1,11 @@
 package com.izertis.kata.bowling;
 
-import com.izertis.kata.bowling.BowlingGame;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class BowlingGameTest {
+import es.izertis.kata.bowling.BowlingGame;
+
+/* public class BowlingGameTest {
 
     @Test
     public void testGame0() {
@@ -83,6 +84,22 @@ public class BowlingGameTest {
         for (int i = 0; i < times; i++) {
             game.roll(pins);
         }
+    }
+
+}
+ */
+
+public class BowlingGameTest {
+
+    @Test
+    public void worstGame() {
+        BowlingGame game = new BowlingGame();
+        for (int i = 0; i < 20; i++) {
+            game.roll(0);
+        }
+        
+        int score = game.getScore();
+        Assert.assertEquals(0, score);
     }
 
 }
