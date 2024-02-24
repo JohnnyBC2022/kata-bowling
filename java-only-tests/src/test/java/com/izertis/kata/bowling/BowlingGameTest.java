@@ -97,9 +97,21 @@ public class BowlingGameTest {
         for (int i = 0; i < 20; i++) {
             game.roll(0);
         }
-        
+
         int score = game.getScore();
         Assert.assertEquals(0, score);
+    }
+
+    @Test
+    public void onePinDown() {
+        BowlingGame game = new BowlingGame();
+        game.roll(1);
+        for (int i = 0; i < 19; i++) {
+            game.roll(0);
+        }
+
+        int score = game.getScore();
+        Assert.assertEquals(1, score);
     }
 
 }

@@ -84,9 +84,16 @@ Tests:
 
 # Comentarios test Jonathan Baragaño
 
-Como llevo poco tiempo realizando TDD con junit en JAVA (he empezado este mes), he comentado todos los test e intentaré resolverlos a mi manera para poder afianzar los conocimientos.
+Como llevo poco tiempo realizando TDD con junit en JAVA (he empezado este mes), he comentado todos los test e intentaré resolverlos a mi manera para poder afianzar los conocimientos. Como se ha explicado, el flujo debe ser realizar un test que no se supere (red), luego implementar un método que consiga superar el test (green) y refactorizar el código. En estos comentarios iré comentando paso a paso todo lo que voy haciendo, así le puede servir como guía a aquellas personas que se están iniciando en TDD. En los comentarios añadiré para cada uno de los test el nombre del test (Red) y si hay algo que destacar que considere importante, en "Green" comentarios acerca de lo realizado para superar el test y en "Refactoring" si hay algo que destacar.
 
-## Test peor juego posible
+## Test peor juego posible (worstGame)
 Voy a empezar realizando el primer test comprobando la peor puntuación posible que es 0. Para ello tienes 20 lanzamientos en los que no se ha logrado tirar ni un solo bolo. En este caso, la puntuación esperada en el test debe ser 0 y para ello en el método BowlingGame bastará con retornar un 0 en la puntuación.
+Red: test worstGame ;
+Green: return 0 in getScore();
+Refactoring: OK
 
-## 
+##  Test tirar un bolo en todo el juego (onePin)
+En este test, vamos a considerar que durante 19 tiradas no se ha conseguido tirar ni un solo bolo y que en otra de las tiradas se ha tirado un bolo. Por lo tanto, la puntuación es 1.
+Red: test onePin;
+Green: en la clase BowlingGame añado una variable tipo int que servirá para almacenar el valor de las tiradas. En el método roll, se ejecutará y en el método getScore se retornará su valor. En este caso, en el test, el método roll recibe como parámetro 1, por lo tanto el valor de la variable count es 1 y ese es el valor que se debe esperar en el test. 
+Refactoring: no hace falta.
