@@ -91,27 +91,47 @@ import es.izertis.kata.bowling.BowlingGame;
 
 public class BowlingGameTest {
 
-    @Test
-    public void worstGame() {
-        BowlingGame game = new BowlingGame();
-        for (int i = 0; i < 20; i++) {
-            game.roll(0);
+    private void rollMany(BowlingGame game, int times, int pins) {
+        for (int i = 0; i < times; i++) {
+            game.roll(pins);
         }
+    }
+
+    @Test
+    public void testWorstGame() {
+        BowlingGame game = new BowlingGame();
+        rollMany(game, 20, 0);
 
         int score = game.getScore();
         Assert.assertEquals(0, score);
     }
 
     @Test
-    public void onePinDown() {
+    public void testOnePinDown() {
         BowlingGame game = new BowlingGame();
         game.roll(1);
-        for (int i = 0; i < 19; i++) {
-            game.roll(0);
-        }
+        rollMany(game, 19, 0);
 
         int score = game.getScore();
         Assert.assertEquals(1, score);
+    }
+
+    @Test
+    public void testGameAll1() {
+        BowlingGame game = new BowlingGame();
+        rollMany(game, 20, 1);
+
+        int score = game.getScore();
+        Assert.assertEquals(20, score);
+    }
+
+    @Test
+    public void tooLargeRoll() {
+        BowlingGame game = new BowlingGame();
+        rollMany(game, 20, 11);
+
+        int score = game.getScore();
+        Assert.assertEquals(20, score);
     }
 
 }

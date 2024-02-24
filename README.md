@@ -1,7 +1,7 @@
 # Kata "Software de bolera"
 
-En esta kata se expone un problema en el que se debe implementar un algoritmo para el cálculo de la puntuación de una bolera.  
-En este fichero encontrará una explicación de las normas y se plantearán casos de prueba de escenarios que el software debe soportar.  
+En esta kata se expone un problema en el que se debe implementar un algoritmo para el cálculo de la puntuación de una bolera.
+En este fichero encontrará una explicación de las normas y se plantearán casos de prueba de escenarios que el software debe soportar.
 Es un ejemplo perfecto de como TDD (Test-driven-development) nos puede ayudar a programar enfocando el desarrollo en ciclos de:
 
 - Escritura de test: implementar test automatizados para probar la funcionalidad a desarrollar
@@ -23,16 +23,16 @@ En caso de elejir java tienes en la carpeta "java-only-tests" los test implement
 
 ### Tests
 
-Se recomienda usar TDD y empezar escribiendo uno a uno los tests.  
-La entrada al “algoritmo” serán el nº de bolos tirados y la salida la puntuación.  
+Se recomienda usar TDD y empezar escribiendo uno a uno los tests.
+La entrada al “algoritmo” serán el nº de bolos tirados y la salida la puntuación.
 Tests básicos:
 
 - Tirar siempre un bolo (10 rondas x 2 tiradas = 20 tiradas => 20 bolos)
   ![Tirada siempre un bolo](resources/img/tirada_todo_1.png?raw=true "Siempre un bolo")
-  Este juego lo escribiremos por abreviar como "20x1" (<nº veces>x<nº bolos tirados>)  
+  Este juego lo escribiremos por abreviar como "20x1" (<nº veces>x<nº bolos tirados>)
    20x1 -> 20 puntos
 
-- Tirar siempre 0 bolos:  
+- Tirar siempre 0 bolos:
    20x0 -> 0 puntos
 
 - Tirar 10 veces 3 y el resto 0:  
@@ -87,13 +87,79 @@ Tests:
 Como llevo poco tiempo realizando TDD con junit en JAVA (he empezado este mes), he comentado todos los test e intentaré resolverlos a mi manera para poder afianzar los conocimientos. Como se ha explicado, el flujo debe ser realizar un test que no se supere (red), luego implementar un método que consiga superar el test (green) y refactorizar el código. En estos comentarios iré comentando paso a paso todo lo que voy haciendo, así le puede servir como guía a aquellas personas que se están iniciando en TDD. En los comentarios añadiré para cada uno de los test el nombre del test (Red) y si hay algo que destacar que considere importante, en "Green" comentarios acerca de lo realizado para superar el test y en "Refactoring" si hay algo que destacar.
 
 ## Test peor juego posible (worstGame)
+Es el equivalente a 20x0.
 Voy a empezar realizando el primer test comprobando la peor puntuación posible que es 0. Para ello tienes 20 lanzamientos en los que no se ha logrado tirar ni un solo bolo. En este caso, la puntuación esperada en el test debe ser 0 y para ello en el método BowlingGame bastará con retornar un 0 en la puntuación.
-Red: test worstGame ;
-Green: return 0 in getScore();
-Refactoring: OK
+**Red**: testWorstGame ;
+**Green**: return 0 in getScore();
+**Refactoring**: no hago nada por el momento.
 
 ##  Test tirar un bolo en todo el juego (onePin)
 En este test, vamos a considerar que durante 19 tiradas no se ha conseguido tirar ni un solo bolo y que en otra de las tiradas se ha tirado un bolo. Por lo tanto, la puntuación es 1.
-Red: test onePin;
-Green: en la clase BowlingGame añado una variable tipo int que servirá para almacenar el valor de las tiradas. En el método roll, se ejecutará y en el método getScore se retornará su valor. En este caso, en el test, el método roll recibe como parámetro 1, por lo tanto el valor de la variable count es 1 y ese es el valor que se debe esperar en el test. 
-Refactoring: no hace falta.
+**Red**: testOnePin;
+**Green**: Simulamos haber tirado un bolo antes de la iteración.
+```java
+game.roll(1)
+```
+En la clase BowlingGame añado una variable tipo int que servirá para almacenar el valor de las tiradas. En el método roll y para que por el momento supere el test de la forma más sencilla posible el valor de count debe actualizarse en cada tirada sumándole el número de bolos tirados.:
+```java
+(count =+ pins)
+```
+Lo ejecutamos en el test:
+```java
+ (game.roll(pins))
+```
+y en el método getScore se retornará su valor. 
+En este caso, en el test, el método roll recibe como parámetro 1 (pins = 1), por lo tanto el valor de la variable count es 1 y ese es el valor que se debe esperar en el test.
+**Refactoring**: no hago nada importante por el momento.
+
+## Test tirar un bolo en cada tirada
+Este test se puede resolver fácilmente con una pequeña modificación del test anterior ya que solo tenemos que hacer que en cada iteración del bucle for se sume 1 a la puntuación y esperar que el resultado tras 20 lanzamientos sea 20.
+**Red**: testGameAll1
+**Green**: hacemos que en cada tirada se consiga una puntuación de 1, para ello ejecutamos dentro del bucle for:
+```java
+ for (int i = 0; i < 20; i++) {
+            game.roll(1);
+        }
+```
+La puntuación esperada debe ser 20
+```java
+Assert.assertEquals(20, score);
+```
+
+**Refactoring**: Podemos observar un bucle que ejecutamos una y otra vez, así que podemos implementar un método para el número de tiradas y así ahorraremos líneas de código. Este método lo llamaremos **rollMany** que recibirá como paramétros el número de lanzamientos (**times**) y los bolos derribados (**pins**) Por lo tanto, tenemos un nuevo método void que nos permitirá simular un lanzamiento el número de veces que queramos:
+```java
+private void rollMany(BowlingGame game, int times, int pins) {
+        for (int i = 0; i < times; i++) {
+            game.roll(pins);
+        }
+    }
+```
+De esta forma podremos refactorizar el código: 
+```java
+@Test
+    public void testGameAll1() {
+        BowlingGame game = new BowlingGame();
+        for (int i = 0; i < 20; i++) {
+            game.roll(1);
+        }
+
+        int score = game.getScore();
+        Assert.assertEquals(20, score);
+    }
+```
+a:
+```java
+    @Test
+    public void testGameAll1() {
+        BowlingGame game = new BowlingGame();
+        rollMany(game, 20, 1);
+
+        int score = game.getScore();
+        Assert.assertEquals(20, score);
+    }
+```
+
+y podemos hacer lo mismo para los test anteriores que habíamos hecho simplificando su código.
+
+## Verificar que no puedes tirar más de 10 bolos (toLargeRoll)
+Esta es una comprobación bastante lógica, en un lanzamiento no se pueden
