@@ -162,4 +162,22 @@ a:
 y podemos hacer lo mismo para los test anteriores que habíamos hecho simplificando su código.
 
 ## Verificar que no puedes tirar más de 10 bolos (toLargeRoll)
-Esta es una comprobación bastante lógica, en un lanzamiento no se pueden
+Como el número de bolos máximo que se puede derribar en un lanzamiento son 10, deberíamos testear que se cumpla este requisito.
+
+**Red:** Para realizar esta verificación, creamos una instancia del juego de bolos y luego intentamos tirar 11 bolos en un solo lanzamiento llamando al método **roll** con valor de 11 como argumento. Como este movimiento no es válido en el juego, esperamos que el juego lance una excepción del tipo **IllegalArgumentException**.
+
+**Green:** Una vez escrito el test, para conseguir que se supere, debemos añadir la excepción al método roll, por lo tanto, debemos implementar una sentencia de control que se ejecute en el caso de un lanzamiento superior a 10: 
+
+```java
+ public void roll(int pins) {
+        if (pins > 10) {
+            throw new IllegalArgumentException();
+        }
+        count += pins;
+    }
+```
+**Refactoring**: no hacemos nada más en este momento.
+
+## Verificar que no hay lanzamientos con números negativos.
+Podemos realizar un test muy similar al anterior que lance una excepción si se derriban un número de bolos negativo, ya que esto no es posible.
+

@@ -125,13 +125,11 @@ public class BowlingGameTest {
         Assert.assertEquals(20, score);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void tooLargeRoll() {
         BowlingGame game = new BowlingGame();
-        rollMany(game, 20, 11);
-
-        int score = game.getScore();
-        Assert.assertEquals(20, score);
+        game.roll(11);
     }
+
 
 }
