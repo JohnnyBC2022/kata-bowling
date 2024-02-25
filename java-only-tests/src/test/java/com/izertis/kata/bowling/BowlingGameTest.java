@@ -126,16 +126,26 @@ public class BowlingGameTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void tooLargeRoll() {
+    public void testTooLargeRoll() {
         BowlingGame game = new BowlingGame();
         game.roll(11);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void negativeRoll() {
+    public void testNegativeRoll() {
         BowlingGame game = new BowlingGame();
         game.roll(-1);
     }
 
+    @Test
+    public void testGameSpare() {
+        BowlingGame game = new BowlingGame();
+        game.roll(5);
+        game.roll(5);
+        game.roll(3);
+
+        int score = game.getScore();
+        Assert.assertEquals(16, score);
+    }
 
 }

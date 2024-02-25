@@ -30,10 +30,10 @@ Tests básicos:
 - Tirar siempre un bolo (10 rondas x 2 tiradas = 20 tiradas => 20 bolos)
   ![Tirada siempre un bolo](resources/img/tirada_todo_1.png?raw=true "Siempre un bolo")
   Este juego lo escribiremos por abreviar como "20x1" (<nº veces>x<nº bolos tirados>)
-   20x1 -> 20 puntos
+  20x1 -> 20 puntos
 
 - Tirar siempre 0 bolos:
-   20x0 -> 0 puntos
+  20x0 -> 0 puntos
 
 - Tirar 10 veces 3 y el resto 0:  
    10x3 & 10x0 -> 30 puntos
@@ -41,7 +41,7 @@ Tests básicos:
 ### Semipleno "/"
 
 Si entre las 2 tiradas de la ronda tira los 10 bolos es un semipleno.  
-Esto implica que te regalan como EXTRA para esta ronda tantos puntos como bolos tires en la siguiente TIRADA.  
+Esto implica que te regalan como EXTRA para esta ronda tantos puntos como bolos tires en la siguiente TIRADA.
 Tests:
 
 - Semipleno suma la siguiente tirada:  
@@ -81,52 +81,64 @@ Tests:
 
 ![300 puntos](resources/img/300puntos.png?raw=true "300 puntos")
 
-
 # Comentarios test Jonathan Baragaño
 
 Como llevo poco tiempo realizando TDD con junit en JAVA (he empezado este mes), he comentado todos los test e intentaré resolverlos a mi manera para poder afianzar los conocimientos. Como se ha explicado, el flujo debe ser realizar un test que no se supere (red), luego implementar un método que consiga superar el test (green) y refactorizar el código. En estos comentarios iré comentando paso a paso todo lo que voy haciendo, así le puede servir como guía a aquellas personas que se están iniciando en TDD. En los comentarios añadiré para cada uno de los test el nombre del test (Red) y si hay algo que destacar que considere importante, en "Green" comentarios acerca de lo realizado para superar el test y en "Refactoring" si hay algo que destacar.
 
 ## Test peor juego posible (worstGame)
+
 Es el equivalente a 20x0.
 Voy a empezar realizando el primer test comprobando la peor puntuación posible que es 0. Para ello tienes 20 lanzamientos en los que no se ha logrado tirar ni un solo bolo. En este caso, la puntuación esperada en el test debe ser 0 y para ello en el método BowlingGame bastará con retornar un 0 en la puntuación.
 **Red**: testWorstGame ;
 **Green**: return 0 in getScore();
 **Refactoring**: no hago nada por el momento.
 
-##  Test tirar un bolo en todo el juego (onePin)
+## Test tirar un bolo en todo el juego (onePin)
+
 En este test, vamos a considerar que durante 19 tiradas no se ha conseguido tirar ni un solo bolo y que en otra de las tiradas se ha tirado un bolo. Por lo tanto, la puntuación es 1.
 **Red**: testOnePin;
 **Green**: Simulamos haber tirado un bolo antes de la iteración.
+
 ```java
 game.roll(1)
 ```
+
 En la clase BowlingGame añado una variable tipo int que servirá para almacenar el valor de las tiradas. En el método roll y para que por el momento supere el test de la forma más sencilla posible el valor de count debe actualizarse en cada tirada sumándole el número de bolos tirados.:
+
 ```java
 (count =+ pins)
 ```
+
 Lo ejecutamos en el test:
+
 ```java
  (game.roll(pins))
 ```
-y en el método getScore se retornará su valor. 
+
+y en el método getScore se retornará su valor.
 En este caso, en el test, el método roll recibe como parámetro 1 (pins = 1), por lo tanto el valor de la variable count es 1 y ese es el valor que se debe esperar en el test.
 **Refactoring**: no hago nada importante por el momento.
 
 ## Test tirar un bolo en cada tirada
+
 Este test se puede resolver fácilmente con una pequeña modificación del test anterior ya que solo tenemos que hacer que en cada iteración del bucle for se sume 1 a la puntuación y esperar que el resultado tras 20 lanzamientos sea 20.
 **Red**: testGameAll1
 **Green**: hacemos que en cada tirada se consiga una puntuación de 1, para ello ejecutamos dentro del bucle for:
+
 ```java
  for (int i = 0; i < 20; i++) {
             game.roll(1);
         }
 ```
+
 La puntuación esperada debe ser 20
+
 ```java
 Assert.assertEquals(20, score);
 ```
 
 **Refactoring**: Podemos observar un bucle que ejecutamos una y otra vez, así que podemos implementar un método para el número de tiradas y así ahorraremos líneas de código. Este método lo llamaremos **rollMany** que recibirá como paramétros el número de lanzamientos (**times**) y los bolos derribados (**pins**) Por lo tanto, tenemos un nuevo método void que nos permitirá simular un lanzamiento el número de veces que queramos:
+
 ```java
 private void rollMany(BowlingGame game, int times, int pins) {
         for (int i = 0; i < times; i++) {
@@ -134,7 +146,9 @@ private void rollMany(BowlingGame game, int times, int pins) {
         }
     }
 ```
-De esta forma podremos refactorizar el código: 
+
+De esta forma podremos refactorizar el código:
+
 ```java
 @Test
     public void testGameAll1() {
@@ -147,7 +161,9 @@ De esta forma podremos refactorizar el código:
         Assert.assertEquals(20, score);
     }
 ```
+
 a:
+
 ```java
     @Test
     public void testGameAll1() {
@@ -162,11 +178,12 @@ a:
 y podemos hacer lo mismo para los test anteriores que habíamos hecho simplificando su código.
 
 ## Verificar que no puedes tirar más de 10 bolos (toLargeRoll)
+
 Como el número de bolos máximo que se puede derribar en un lanzamiento son 10, deberíamos testear que se cumpla este requisito.
 
 **Red:** Para realizar esta verificación, creamos una instancia del juego de bolos y luego intentamos tirar 11 bolos en un solo lanzamiento llamando al método **roll** con valor de 11 como argumento. Como este movimiento no es válido en el juego, esperamos que el juego lance una excepción del tipo **IllegalArgumentException**.
 
-**Green:** Una vez escrito el test, para conseguir que se supere, debemos añadir la excepción al método roll, por lo tanto, debemos implementar una sentencia de control que se ejecute en el caso de un lanzamiento superior a 10: 
+**Green:** Una vez escrito el test, para conseguir que se supere, debemos añadir la excepción al método roll, por lo tanto, debemos implementar una sentencia de control que se ejecute en el caso de un lanzamiento superior a 10:
 
 ```java
  public void roll(int pins) {
@@ -176,12 +193,15 @@ Como el número de bolos máximo que se puede derribar en un lanzamiento son 10,
         count += pins;
     }
 ```
+
 **Refactoring**: no hacemos nada más en este momento.
 
-## Verificar que no hay lanzamientos con números negativos.
+## Verificar que no hay lanzamientos con números negativos (negativeRoll).
+
 Podemos realizar un test muy similar al anterior que lance una excepción si se derriban un número de bolos negativo, ya que esto no es posible.
 
 **Red**: Podemos reutilizar el test anterior cambiando el argumento de roll a un número negativo, por ejemplo:
+
 ```java
 game.roll(-1)
 ```
@@ -191,5 +211,5 @@ game.roll(-1)
 ```java
 if(pins < 0 || pins > 10)
 ```
-**Refactoring**: No hay modificaciones en este momento
 
+**Refactoring**: No hay modificaciones en este momento
