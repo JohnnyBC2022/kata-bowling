@@ -181,3 +181,15 @@ Como el número de bolos máximo que se puede derribar en un lanzamiento son 10,
 ## Verificar que no hay lanzamientos con números negativos.
 Podemos realizar un test muy similar al anterior que lance una excepción si se derriban un número de bolos negativo, ya que esto no es posible.
 
+**Red**: Podemos reutilizar el test anterior cambiando el argumento de roll a un número negativo, por ejemplo:
+```java
+game.roll(-1)
+```
+
+**Green**: Para pasar el test, bastará con modificar la condición en la sentencia de control para aquellas hipotéticas situaciones en las que se derriben bolos negativos.
+
+```java
+if(pins < 0 || pins > 10)
+```
+**Refactoring**: No hay modificaciones en este momento
+

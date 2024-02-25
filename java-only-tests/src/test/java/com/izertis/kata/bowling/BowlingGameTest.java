@@ -131,5 +131,11 @@ public class BowlingGameTest {
         game.roll(11);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void negativeRoll() {
+        BowlingGame game = new BowlingGame();
+        game.roll(-1);
+    }
+
 
 }
