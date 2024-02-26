@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import es.izertis.kata.bowling.BowlingGame;
 
-/* public class BowlingGameTest {
+ public class BowlingGameTest {
 
     @Test
     public void testGame0() {
@@ -87,65 +87,4 @@ import es.izertis.kata.bowling.BowlingGame;
     }
 
 }
- */
-
-public class BowlingGameTest {
-
-    private void rollMany(BowlingGame game, int times, int pins) {
-        for (int i = 0; i < times; i++) {
-            game.roll(pins);
-        }
-    }
-
-    @Test
-    public void testWorstGame() {
-        BowlingGame game = new BowlingGame();
-        rollMany(game, 20, 0);
-
-        int score = game.getScore();
-        Assert.assertEquals(0, score);
-    }
-
-    @Test
-    public void testOnePinDown() {
-        BowlingGame game = new BowlingGame();
-        game.roll(1);
-        rollMany(game, 19, 0);
-
-        int score = game.getScore();
-        Assert.assertEquals(1, score);
-    }
-
-    @Test
-    public void testGameAll1() {
-        BowlingGame game = new BowlingGame();
-        rollMany(game, 20, 1);
-
-        int score = game.getScore();
-        Assert.assertEquals(20, score);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testTooLargeRoll() {
-        BowlingGame game = new BowlingGame();
-        game.roll(11);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testNegativeRoll() {
-        BowlingGame game = new BowlingGame();
-        game.roll(-1);
-    }
-
-    @Test
-    public void testGameSpare() {
-        BowlingGame game = new BowlingGame();
-        game.roll(5);
-        game.roll(5);
-        game.roll(3);
-
-        int score = game.getScore();
-        Assert.assertEquals(16, score);
-    }
-
-}
+ 
