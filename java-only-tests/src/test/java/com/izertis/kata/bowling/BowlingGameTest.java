@@ -1,10 +1,11 @@
 package com.izertis.kata.bowling;
 
-import com.izertis.kata.bowling.BowlingGame;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class BowlingGameTest {
+import es.izertis.kata.bowling.BowlingGame;
+
+ public class BowlingGameTest {
 
     @Test
     public void testGame0() {
@@ -86,3 +87,4 @@ public class BowlingGameTest {
     }
 
 }
+ 
