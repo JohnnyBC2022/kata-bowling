@@ -3,8 +3,6 @@ package es.izertis.kata.bowling;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class BowlingGame {
 
     private List<Integer> rolls = new ArrayList<>();
